@@ -134,6 +134,7 @@ sudo firewall-cmd --zone=public --permanent --add-port=2222/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=3306/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=80/tcp
 sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
+sudo firewall-cmd --zone=public --permanent --add-port=11211/tcp
 sudo firewall-cmd --reload
 
 sudo systemctl restart httpd.service
