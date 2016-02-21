@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+hostname = "dev.localhost"
+server_ip = "192.168.13.37"
+server_memory = "1024" # MB
+project_name = "centos7-vagrant"
+
+Vagrant.configure("2") do |config|
+
+  #you could change the box, just make sure it has guessVB available
+  #config.vm.box = "https://github.com/holms/vagrant-centos7-box/releases/download/7.1.1503.001/CentOS-7.1.1503-x86_64-netboot.box"
+  config.vm.box = "aviture/centos7"
+  
+  config.vm.define project_name do |v|
+  end
+
+  config.vm.hostname = hostname
+  config.vm.network :forwarded_port, guest: 80, host: 8080
+  config.vm.network "private_network", ip: "192.168.13.37", auto_config: false
+  config.vm.provision :shell, path: "bootstrap.sh"
+
+  config.vm.synced_folder "./", "/vagrant"
+
+  config.ssh.insert_key = false
+
+  # If using VirtualBox
+  config.vm.provider :virtualbox do |vb|
+    vb.name = project_name
+    # Set server memory
+    vb.customize ["modifyvm", :id, "--memory", server_memory]
+
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
+
+    #vb.gui = true
+
+  end
+
+end
